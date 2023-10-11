@@ -1,4 +1,4 @@
-# @name create-user
+# @name createUser
 POST http://localhost:8080/users
 Content-Type: application/json
 
@@ -6,4 +6,22 @@ Content-Type: application/json
   "name": "Edvaldo Junior",
   "username": "eddypbr",
   "password": "12345"
+}
+
+###
+
+@userId = {{createUser.response.body.id}}
+
+# @name createTask
+
+POST http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "description": "Minha primeira tarefa",
+  "title": "Primeira tarefa",
+  "priority": "ALTA",
+  "startAt": "2023-10-11T14:00:00",
+  "endAt": "2023-10-11T14:05:00",
+  "idUser": "{{userId}}"
 }
