@@ -65,6 +65,12 @@ public class TaskController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
     }
 
+    var idUser = request.getAttribute("idUser");
+
+    if (!task.getIdUser().equals(idUser)) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not authorized to update this task");
+    }
+
     Utils.copyNonNullProperties(taskModel, task);
 
     var updatedTask = this.taskRepository.save(task);
