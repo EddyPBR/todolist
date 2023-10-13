@@ -10,18 +10,37 @@ Content-Type: application/json
 
 ###
 
-@userId = {{createUser.response.body.id}}
-
 # @name createTask
 
 POST http://localhost:8080/tasks
 Content-Type: application/json
+Authorization: Basic eddypbr:12345
 
 {
   "description": "Minha primeira tarefa",
   "title": "Primeira tarefa",
   "priority": "ALTA",
-  "startAt": "2023-10-11T14:00:00",
-  "endAt": "2023-10-11T14:05:00",
-  "idUser": "{{userId}}"
+  "startAt": "2023-10-13T14:00:00",
+  "endAt": "2023-10-13T14:05:00"
+}
+
+###
+
+@taskId = {{ createTask.response.body.id }}
+
+# @name listTasks
+
+GET http://localhost:8080/tasks
+Content-Type: application/json
+Authorization: Basic eddypbr:12345
+
+###
+
+# @name updateTask
+PUT http://localhost:8080/tasks/{{taskId}}
+Content-Type: application/json
+Authorization: Basic eddypbr:12345
+
+{
+  "description": "Minha primeira tarefa, com descrição atualizada!"
 }
