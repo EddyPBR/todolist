@@ -20,8 +20,8 @@ Authorization: Basic eddypbr:12345
   "description": "Minha primeira tarefa",
   "title": "Primeira tarefa",
   "priority": "ALTA",
-  "startAt": "2023-10-13T14:00:00",
-  "endAt": "2023-10-13T14:05:00"
+  "startAt": "2023-10-14T14:00:00",
+  "endAt": "2023-10-14T14:05:00"
 }
 
 ###
@@ -44,3 +44,10 @@ Authorization: Basic eddypbr:12345
 {
   "description": "Minha primeira tarefa, com descrição atualizada!"
 }
+
+###
+
+# @name deleteTask
+DELETE http://localhost:8080/tasks/{{taskId}}
+Content-Type: application/json
+Authorization: Basic eddypbr:12345
