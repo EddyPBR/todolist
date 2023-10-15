@@ -28,7 +28,15 @@ public class TaskModel {
 
   private LocalDateTime endAt;
 
-  private String priority;
+  private TaskPriorityEnum priority;
+
+  public void setPriority(TaskPriorityEnum priority) throws Exception {
+    if (priority == null) {
+      throw new Exception("Invalid priority value");
+    }
+    
+    this.priority = priority;
+  }
 
   private UUID idUser;
 
