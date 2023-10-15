@@ -10,6 +10,13 @@ Content-Type: application/json
 
 ###
 
+# @name getAuth
+GET http://localhost:8080/auth
+Content-Type: application/json
+Authorization: Basic eddypbr:12345
+
+###
+
 # @name createTask
 
 POST http://localhost:8080/tasks
@@ -20,8 +27,8 @@ Authorization: Basic eddypbr:12345
   "description": "Minha primeira tarefa",
   "title": "Primeira tarefa",
   "priority": "ALTA",
-  "startAt": "2023-10-14T14:00:00",
-  "endAt": "2023-10-14T14:05:00"
+  "startAt": "2023-10-15T14:00:00",
+  "endAt": "2023-10-15T14:05:00"
 }
 
 ###
