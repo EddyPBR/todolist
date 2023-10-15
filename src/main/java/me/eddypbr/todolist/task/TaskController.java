@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import me.eddypbr.todolist.user.UserModel;
 import me.eddypbr.todolist.utils.Utils;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 
 @RestController
 @RequestMapping("/tasks")
@@ -31,23 +30,24 @@ public class TaskController {
 
   @GetMapping
   public List<TaskModel> list(HttpServletRequest request) {
-    var idUser = request.getAttribute("idUser");
+    UserModel user = (UserModel) request.getAttribute("user");
 
-    var tasks = this.taskRepository.findByIdUser((UUID) idUser);
-    
+    var tasks = this.taskRepository.findByIdUser(user.getId());
+
     return tasks;
   }
 
   @PostMapping
   public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) {
-    var idUser = request.getAttribute("idUser");
+    UserModel user = (UserModel) request.getAttribute("user");
 
-    taskModel.setIdUser((UUID) idUser);
+    taskModel.setIdUser((UUID) user.getId());
 
     var currentDate = LocalDateTime.now();
 
     if (currentDate.isAfter(taskModel.getStartAt()) || currentDate.isAfter(taskModel.getEndAt())) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The start/end date must be greater than the current date");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+          .body("The start/end date must be greater than the current date");
     }
 
     if (taskModel.getStartAt().isAfter(taskModel.getEndAt())) {
@@ -60,16 +60,16 @@ public class TaskController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {      
+  public ResponseEntity update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {
     var task = this.taskRepository.findById(id).orElse(null);
 
     if (task == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
     }
 
-    var idUser = request.getAttribute("idUser");
+    UserModel user = (UserModel) request.getAttribute("user");
 
-    if (!task.getIdUser().equals(idUser)) {
+    if (!task.getIdUser().equals(user.getId())) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not authorized to update this task");
     }
 
@@ -81,16 +81,16 @@ public class TaskController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity delete(HttpServletRequest request, @PathVariable UUID id) {      
+  public ResponseEntity delete(HttpServletRequest request, @PathVariable UUID id) {
     var task = this.taskRepository.findById(id).orElse(null);
 
     if (task == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
     }
 
-    var idUser = request.getAttribute("idUser");
+    UserModel user = (UserModel) request.getAttribute("user");
 
-    if (!task.getIdUser().equals(idUser)) {
+    if (!task.getIdUser().equals(user.getId())) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not authorized to update this task");
     }
 
